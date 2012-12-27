@@ -117,8 +117,7 @@ namespace ComputerTimer
         private void timer1_Tick(object sender, EventArgs e)
         {
             if (disable == false)
-            {
-                notifyIcon1.Text = "some text";
+            {  
                 if (current_time + 1 >= int.MaxValue)
                 {
                     current_time = 0;
@@ -128,12 +127,29 @@ namespace ComputerTimer
                 {
                     if (WindowState != FormWindowState.Normal)
                     {
-                        if (current_time % remind.interval == 0)
+                        int next_time = current_time % remind.interval;
+                        if (next_time == 0)
                         {
+                            notifyIcon1.Text = "Computer Timer";
                             player.SoundLocation = "alert.wav";
                             player.Load();
                             player.Play();
                             MessageBox.Show(remind.text);
+                        }
+                        else
+                        {
+                            int remains = remind.interval - next_time;
+                            int min = remains / 60;
+                            string time = "";
+                            if (min > 0)
+                            {
+                                time = min + "m " + (remains / min) + "s";
+                            }
+                            else
+                            {
+                                time = remains + "s";
+                            }
+                            notifyIcon1.Text = "Computer Timer (next in " + time + ")";
                         }
                     }
                 }
